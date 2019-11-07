@@ -1,0 +1,1 @@
+# Vadí ztrátová komprese analýze obrazu?
