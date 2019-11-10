@@ -9,13 +9,15 @@ import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Codec {
-    JPEG(Format.PPM, JpegConverter.class);
+    JPEG(Format.PPM, Format.JPEG, JpegConverter.class);
 
     private Format baseFormat;
+    private Format targetFormat;
     private Class<? extends IConverter> converterClass;
 
-    Codec(Format baseFormat, Class<? extends IConverter> converterClass) {
+    Codec(Format baseFormat, Format targetFormat, Class<? extends IConverter> converterClass) {
         this.baseFormat = baseFormat;
+        this.targetFormat = targetFormat;
         this.converterClass = converterClass;
     }
 
@@ -24,6 +26,13 @@ public enum Codec {
      */
     public Format getBaseFormat() {
         return baseFormat;
+    }
+
+    /**
+     * Return image format that is created using this codec
+     */
+    public Format getTargetFormat() {
+        return targetFormat;
     }
 
     /**

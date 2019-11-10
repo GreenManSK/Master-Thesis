@@ -1,7 +1,11 @@
 package cz.muni.fi.xkurcik.masterthesis.convert;
 
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provider for instances of each converter implementation with correct executable
@@ -9,6 +13,8 @@ import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public class ConverterProvider {
+
+    private static final Logger LOGGER = LogManager.getLogger(ConverterProvider.class.getName());
 
     private JpegConverter jpegConverter;
     private ImageMagickConverter imageMagickConverter;
@@ -30,5 +36,19 @@ public class ConverterProvider {
 
     public void setImageMagickConverter(ImageMagickConverter imageMagickConverter) {
         this.imageMagickConverter = imageMagickConverter;
+    }
+
+    /**
+     * Get converter by codec
+     */
+    public IConverter getByCodec(Codec codec) {
+        switch (codec) {
+            case JPEG:
+                return jpegConverter;
+            default:
+                String msg = String.format("Codec %s dose not have converter assigned", codec.toString());
+                LOGGER.error(msg);
+                throw new UnsupportedOperationException(msg);
+        }
     }
 }

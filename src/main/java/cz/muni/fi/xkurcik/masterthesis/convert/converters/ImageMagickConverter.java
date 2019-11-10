@@ -35,6 +35,11 @@ public class ImageMagickConverter extends AExecConverter<String> {
         throw new UnsupportedOperationException("Dose not support conversion to stream");
     }
 
+    @Override
+    public String serializeParams(String params) {
+        return params;
+    }
+
     private String constructCommand(String source, String target, String params) {
         return String.format("%s convert %s %s %s", executable, params, source, target);
     }

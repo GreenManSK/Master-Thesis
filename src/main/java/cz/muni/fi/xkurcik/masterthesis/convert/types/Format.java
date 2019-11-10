@@ -6,7 +6,7 @@ package cz.muni.fi.xkurcik.masterthesis.convert.types;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Format {
-    TIFF(".tiff"), PPM(".ppm");
+    TIFF(".tif"), PPM(".ppm"), JPEG(".jpeg");
 
     private final String extension;
 

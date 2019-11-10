@@ -35,6 +35,11 @@ public class JpegConverter extends AExecConverter<Integer> {
         throw new UnsupportedOperationException("Dose not support conversion to stream");
     }
 
+    @Override
+    public String serializeParams(Integer params) {
+        return params.toString();
+    }
+
     private String constructCommand(String source, String target, Integer quality) throws ConversionException {
         if (quality > 100 || quality < 0) {
             throw new ConversionException("Quality parameter must be in range 1 to 100");

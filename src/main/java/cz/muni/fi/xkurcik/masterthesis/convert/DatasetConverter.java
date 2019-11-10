@@ -1,6 +1,7 @@
 package cz.muni.fi.xkurcik.masterthesis.convert;
 
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ConversionException;
+import cz.muni.fi.xkurcik.masterthesis.convert.helpers.CodecConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.helpers.TiffConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
@@ -64,11 +65,21 @@ public class DatasetConverter implements IDatasetConverter {
         }
 
         // Magic
-        // TODO
+        createDatasets(dataset, targetDir, codecs, filesForConversion, groundTruthFolders);
 
         // Delete start formats (thanks list?)
         if (deleteHelpImages) {
             deleteFiles(helpFiles);
+        }
+    }
+
+    /**
+     * Crate converted datasets for each codec
+     */
+    private void createDatasets(Path dataset, Path targetDir, List<Pair<Codec, ?>> codecs, List<Path> filesForConversion, List<Path> groundTruthFolders) {
+        for (Pair<Codec, ?> codecPair : codecs) {
+            CodecConverter<Object> converter = new CodecConverter<>(converterProvider, codecPair.getKey(), codecPair.getValue());
+            converter.convert(dataset, targetDir, filesForConversion, groundTruthFolders);
         }
     }
 
