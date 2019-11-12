@@ -1,5 +1,6 @@
 package cz.muni.fi.xkurcik.masterthesis.convert;
 
+import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
@@ -20,6 +21,19 @@ public class ConverterProvider {
     private ImageMagickConverter imageMagickConverter;
 
     public ConverterProvider() {
+    }
+
+    public ConverterProvider(Runtime runtime, Config config) {
+        fromConfig(runtime, config);
+    }
+
+    private void fromConfig(Runtime runtime, Config config) {
+        if (config.codecs.containsKey(JpegConverter.NAME)) {
+            jpegConverter = new JpegConverter(runtime, config.codecs.get(JpegConverter.NAME));
+        }
+        if (config.codecs.containsKey(ImageMagickConverter.NAME)) {
+            imageMagickConverter = new ImageMagickConverter(runtime, config.codecs.get(ImageMagickConverter.NAME));
+        }
     }
 
     public JpegConverter getJpegConverter() {

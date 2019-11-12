@@ -27,11 +27,11 @@ public class CodecConverter<N> {
     private IConverter<N> converter;
     private N params;
 
-    public CodecConverter(ConverterProvider converterProvider, Codec codec, N params) {
+    public CodecConverter(ConverterProvider converterProvider, Codec codec, String params) {
         this.codec = codec;
         this.converterProvider = converterProvider;
         this.converter = converterProvider.getByCodec(codec);
-        this.params = params;
+        this.params = this.converter.paramsFromString(params);
     }
 
     /**

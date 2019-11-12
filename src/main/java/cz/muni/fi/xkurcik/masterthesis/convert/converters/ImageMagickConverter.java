@@ -15,6 +15,8 @@ public class ImageMagickConverter extends AExecConverter<String> {
 
     private static final Logger LOGGER = LogManager.getLogger(ImageMagickConverter.class.getName());
 
+    public static final String NAME = "IMAGE_MAGIC";
+
     public ImageMagickConverter(Runtime runtime, String executable) {
         super(runtime, executable);
     }
@@ -37,6 +39,11 @@ public class ImageMagickConverter extends AExecConverter<String> {
 
     @Override
     public String serializeParams(String params) {
+        return params;
+    }
+
+    @Override
+    public String paramsFromString(String params) {
         return params;
     }
 

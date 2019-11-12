@@ -35,4 +35,12 @@ public interface IConverter<N> {
      * @return String legal for file name
      */
     String serializeParams(N params);
+
+    /**
+     * Convert string to params object
+     *
+     * @param params string representation of params
+     * @return object for the converter
+     */
+    N paramsFromString(String params);
 }

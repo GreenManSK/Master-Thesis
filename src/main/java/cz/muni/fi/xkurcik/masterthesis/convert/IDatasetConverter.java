@@ -24,5 +24,5 @@ public interface IDatasetConverter {
      * @param deleteHelpImages If true, after finishing will delete all images that were created from tiff for
      *                         converting with specific codec to final format
      */
-    void convert(Path dataset, Path targetDir, List<Pair<Codec, ?>> codecs, boolean deleteHelpImages);
+    void convert(Path dataset, Path targetDir, List<Pair<Codec, String>> codecs, boolean deleteHelpImages);
 }

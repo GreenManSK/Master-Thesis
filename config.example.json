@@ -3,16 +3,16 @@
     "Fluo-N2DH-GOWT1"
   ],
   "codecs": {
-    "imageMagick": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
-    "jpeg": "C:/jpeg.exe"
+    "IMAGE_MAGIC": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
+    "JPEG": "C:/jpeg.exe"
   },
   "converters": [
     {
-      "name": "jpeg",
+      "name": "JPEG",
       "params": "1"
     },
     {
-      "name": "jpeg",
+      "name": "JPEG",
       "params": "50"
     }
   ]

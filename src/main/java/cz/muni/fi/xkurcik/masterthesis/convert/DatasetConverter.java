@@ -37,7 +37,7 @@ public class DatasetConverter implements IDatasetConverter {
     }
 
     @Override
-    public void convert(Path dataset, Path targetDir, List<Pair<Codec, ?>> codecs, boolean deleteHelpImages) {
+    public void convert(Path dataset, Path targetDir, List<Pair<Codec, String>> codecs, boolean deleteHelpImages) {
         // Check if dataset exists
         if (!checkDatasetFolder(dataset)) {
             LOGGER.error(String.format("Invalid dataset folder '%s'", dataset.toString()));
@@ -76,9 +76,9 @@ public class DatasetConverter implements IDatasetConverter {
     /**
      * Crate converted datasets for each codec
      */
-    private void createDatasets(Path dataset, Path targetDir, List<Pair<Codec, ?>> codecs, List<Path> filesForConversion, List<Path> groundTruthFolders) {
-        for (Pair<Codec, ?> codecPair : codecs) {
-            CodecConverter<Object> converter = new CodecConverter<>(converterProvider, codecPair.getKey(), codecPair.getValue());
+    private void createDatasets(Path dataset, Path targetDir, List<Pair<Codec, String>> codecs, List<Path> filesForConversion, List<Path> groundTruthFolders) {
+        for (Pair<Codec, String> codecPair : codecs) {
+            CodecConverter converter = new CodecConverter(converterProvider, codecPair.getKey(), codecPair.getValue());
             converter.convert(dataset, targetDir, filesForConversion, groundTruthFolders);
         }
     }
@@ -159,7 +159,7 @@ public class DatasetConverter implements IDatasetConverter {
     /**
      * Create list of formats that need to be created for all codecs to be able to convert files
      */
-    private Set<Format> createHelpFormatsList(List<Pair<Codec, ?>> codecs) {
+    private Set<Format> createHelpFormatsList(List<Pair<Codec, String>> codecs) {
         HashSet<Format> set = new HashSet<>();
         for (Pair<Codec, ?> codecPair : codecs) {
             set.add(codecPair.getKey().getBaseFormat());

@@ -1,7 +1,13 @@
 package cz.muni.fi.xkurcik.masterthesis.convert.types;
 
+import cz.muni.fi.xkurcik.masterthesis.config.Config;
+import cz.muni.fi.xkurcik.masterthesis.config.ConverterConfig;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Supported codecs
@@ -40,5 +46,16 @@ public enum Codec {
      */
     public Class<? extends IConverter> getConverterClass() {
         return converterClass;
+    }
+
+    public static List<Pair<Codec, String>> listFromConfig(Config config) {
+        List<Pair<Codec, String>> list = new ArrayList<>();
+
+        for (ConverterConfig converter : config.converters) {
+            Codec codec = Codec.valueOf(converter.name);
+            list.add(new Pair<>(codec, converter.params));
+        }
+
+        return list;
     }
 }

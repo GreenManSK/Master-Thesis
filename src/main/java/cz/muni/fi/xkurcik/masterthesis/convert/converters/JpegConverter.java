@@ -15,6 +15,8 @@ public class JpegConverter extends AExecConverter<Integer> {
 
     private static final Logger LOGGER = LogManager.getLogger(JpegConverter.class.getName());
 
+    public static final String NAME = "JPEG";
+
     public JpegConverter(Runtime runtime, String executable) {
         super(runtime, executable);
     }
@@ -38,6 +40,11 @@ public class JpegConverter extends AExecConverter<Integer> {
     @Override
     public String serializeParams(Integer params) {
         return params.toString();
+    }
+
+    @Override
+    public Integer paramsFromString(String params) {
+        return Integer.valueOf(params);
     }
 
     private String constructCommand(String source, String target, Integer quality) throws ConversionException {
