@@ -1,8 +1,15 @@
 package cz.muni.fi.xkurcik.masterthesis.cli;
 
+import cz.muni.fi.xkurcik.masterthesis.config.Config;
+import cz.muni.fi.xkurcik.masterthesis.config.JsonConfig;
+import cz.muni.fi.xkurcik.masterthesis.convert.ConvertRunner;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Takes care of running the application in command line
@@ -12,9 +19,26 @@ import org.apache.logging.log4j.Logger;
 final public class CliMain {
     private static final Logger LOGGER = LogManager.getLogger(CliMain.class.getName());
 
+    private static final String DEFAULT_CONFIG = "config.json";
 
     private static final String HELP_ARG_SHORT = "h";
     private static final String HELP_ARG_LONG = "help";
+
+    private static final String CONFIG_ARG_SHORT = "c";
+    private static final String CONFIG_ARG_LONG = "config";
+
+    private static final String TARGET_ARG_SHORT = "t";
+    private static final String TARGET_ARG_LONG = "target";
+
+    private static final String DATASETS_ARG_SHORT = "d";
+    private static final String DATASETS_ARG_LONG = "datasets";
+
+    private static final String CONVERT_ARG_SHORT = "x";
+    private static final String CONVERT_ARG_LONG = "convert";
+
+    private static final String DELETE_HELP_FILES_ARG_SHORT = "dh";
+    private static final String DELETE_HELP_FILES_ARG_LONG = "deleteHelpFiles";
+
 
     private final Options options;
 
@@ -37,10 +61,41 @@ final public class CliMain {
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine commandLine = parser.parse(options, args);
-            printHelp();
+            if (commandLine.hasOption(HELP_ARG_SHORT) || !shouldRun(commandLine)) {
+                printHelp();
+                return;
+            }
+
+            Config config = JsonConfig.get(Paths.get(commandLine.getOptionValue(CONFIG_ARG_SHORT, DEFAULT_CONFIG)));
+            if (commandLine.hasOption(CONVERT_ARG_SHORT)) {
+                runConvert(commandLine, config);
+            }
+            // TODO: More
         } catch (ParseException e) {
             System.out.println("Problem while parsing arguments. Try using -h for help");
+        } catch (IOException e) {
+            LOGGER.error("Couldn't load config file", e);
         }
+    }
+
+    private void runConvert(CommandLine commandLine, Config config) {
+        if (!commandLine.hasOption(DATASETS_ARG_SHORT)) {
+            System.out.println("For running converts needs -" + DATASETS_ARG_SHORT);
+            return;
+        }
+        if (!commandLine.hasOption(TARGET_ARG_SHORT)) {
+            System.out.println("For running converts needs -" + TARGET_ARG_SHORT);
+            return;
+        }
+        System.out.println("Running convert");
+        Path datasets = Paths.get(commandLine.getOptionValue(DATASETS_ARG_SHORT));
+        Path target = Paths.get(commandLine.getOptionValue(TARGET_ARG_SHORT));
+        ConvertRunner convertRunner = new ConvertRunner(Runtime.getRuntime(), config);
+        convertRunner.run(datasets, target, false);
+    }
+
+    private boolean shouldRun(CommandLine commandLine) {
+        return commandLine.hasOption(CONVERT_ARG_SHORT);
     }
 
     private void printHelp() {
@@ -52,6 +107,13 @@ final public class CliMain {
         Options options = new Options();
 
         options.addOption(HELP_ARG_SHORT, HELP_ARG_LONG, false, "Print help for using this application");
+        options.addOption(CONFIG_ARG_SHORT, CONFIG_ARG_LONG, true, "Path to config file, will use config.json if not present");
+        options.addOption(CONVERT_ARG_SHORT, CONVERT_ARG_LONG, false, "Run convert, needs dataset directory and target directory");
+
+        options.addOption(DATASETS_ARG_SHORT, DATASETS_ARG_LONG, true, "Path to directory with datasets");
+        options.addOption(TARGET_ARG_SHORT, TARGET_ARG_LONG, true, "Path to directory where data will be saved");
+
+        options.addOption(DELETE_HELP_FILES_ARG_SHORT, DELETE_HELP_FILES_ARG_LONG, false, "Delete help files");
 
         return options;
     }
