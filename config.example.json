@@ -1,0 +1,19 @@
+{
+  "datasets": [
+    "Fluo-N2DH-GOWT1"
+  ],
+  "codecs": {
+    "imageMagick": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
+    "jpeg": "C:/jpeg.exe"
+  },
+  "converters": [
+    {
+      "name": "jpeg",
+      "params": "1"
+    },
+    {
+      "name": "jpeg",
+      "params": "50"
+    }
+  ]
+}
