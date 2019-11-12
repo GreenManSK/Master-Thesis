@@ -121,24 +121,21 @@ public class DatasetConverter implements IDatasetConverter {
      * Get list of tiff files needed to be converted
      */
     private List<Path> getFilesForConversion(Path datasetPath) {
-        try (Stream<Path> walk = Files.walk(datasetPath, 1)) {
-            List<Path> sequenceDirs = getSequenceDirs(datasetPath, false);
-            if (sequenceDirs == null)
-                return null;
-            List<Path> files = new ArrayList<>();
-            for (Path sequenceDir : sequenceDirs) {
-                try (Stream<Path> sequenceWalk = Files.walk(sequenceDir)) {
-                    sequenceWalk
-                            .filter(Files::isRegularFile)
-                            .filter(x -> x.toString().toLowerCase().endsWith(TIFF_EXTENSION))
-                            .collect(Collectors.toCollection(() -> files));
-                }
+        List<Path> sequenceDirs = getSequenceDirs(datasetPath, false);
+        if (sequenceDirs == null)
+            return null;
+        List<Path> files = new ArrayList<>();
+        for (Path sequenceDir : sequenceDirs) {
+            try (Stream<Path> sequenceWalk = Files.walk(sequenceDir)) {
+                sequenceWalk
+                        .filter(Files::isRegularFile)
+                        .filter(x -> x.toString().toLowerCase().endsWith(TIFF_EXTENSION))
+                        .collect(Collectors.toCollection(() -> files));
+            } catch (IOException e) {
+                LOGGER.error(String.format("Error while getting files for conversion from '%s'", datasetPath.toString()));
             }
-            return files;
-        } catch (IOException e) {
-            LOGGER.error(String.format("Error while getting files for conversion from '%s'", datasetPath.toString()));
         }
-        return null;
+        return files;
     }
 
     /**
