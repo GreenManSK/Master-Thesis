@@ -1,4 +1,4 @@
-package cz.muni.fi.xkurcik.masterthesis.convert.helpers;
+package cz.muni.fi.xkurcik.masterthesis.helpers;
 
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class NameHelper
+ * @TODO Comments
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */

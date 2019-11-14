@@ -2,9 +2,9 @@ package cz.muni.fi.xkurcik.masterthesis.track;
 
 import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
-import cz.muni.fi.xkurcik.masterthesis.convert.helpers.NamingHelper;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
+import cz.muni.fi.xkurcik.masterthesis.helpers.NamingHelper;
 import cz.muni.fi.xkurcik.masterthesis.helpers.SymlinkHelper;
 import cz.muni.fi.xkurcik.masterthesis.track.trackers.ITracker;
 import javafx.util.Pair;
@@ -58,6 +58,7 @@ public class DatasetTracker implements IDatasetTracker {
      * Run all trackers on dataset converted using provided codec
      */
     private void trackCodec(String datasetName, Path datasetsDir, Codec codec, Object codecParams, int sequences, int filenameLength, Path trackersDir, List<ITracker> trackers) {
+        // @TODO: Refactor/Split
         IConverter converter = converterProvider.getByCodec(codec);
         String convertedDatasetName = NamingHelper.createDatasetName(datasetName, codec, codecParams, converter);
 
