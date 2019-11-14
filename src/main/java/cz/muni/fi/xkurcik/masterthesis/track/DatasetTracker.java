@@ -33,7 +33,7 @@ public class DatasetTracker implements IDatasetTracker {
     }
 
     @Override
-    public void track(String datasetName, Path datasetPath, Path convertedDatasetsDir, List<Pair<Codec, String>> codecs, Path trackersDir, List<ITracker> trackers) {
+    public void track(String datasetName, Path datasetPath, Path convertedDatasetsDir, List<Pair<Codec, ?>> codecs, Path trackersDir, List<ITracker> trackers) {
         // Get number of sequences
         int sequences = getNumberOfSequences(datasetPath);
         if (sequences == 0) {
@@ -48,7 +48,7 @@ public class DatasetTracker implements IDatasetTracker {
             return;
         }
 
-        for (Pair<Codec, String> codec : codecs) {
+        for (Pair<Codec, ?> codec : codecs) {
             LOGGER.info(String.format("Tracking %s converted by %s", datasetName, codec.getKey().toString()));
             trackCodec(datasetName, convertedDatasetsDir, codec.getKey(), codec.getValue(), sequences, filenameLength, trackersDir, trackers);
         }
@@ -57,14 +57,14 @@ public class DatasetTracker implements IDatasetTracker {
     /**
      * Run all trackers on dataset converted using provided codec
      */
-    private void trackCodec(String datasetName, Path datasetsDir, Codec codec, String codecParams, int sequences, int filenameLength, Path trackersDir, List<ITracker> trackers) {
+    private void trackCodec(String datasetName, Path datasetsDir, Codec codec, Object codecParams, int sequences, int filenameLength, Path trackersDir, List<ITracker> trackers) {
         IConverter converter = converterProvider.getByCodec(codec);
         String convertedDatasetName = NamingHelper.createDatasetName(datasetName, codec, codecParams, converter);
 
         Path convertedDatasetPath = datasetsDir.resolve(convertedDatasetName);
         Path symlinkPath = trackersDir.resolve(datasetName);
         try {
-            SymlinkHelper.createSymlink(convertedDatasetPath, symlinkPath);
+            SymlinkHelper.createSymlink(symlinkPath, convertedDatasetPath);
 
             List<String> sequencesList = NamingHelper.getSequenceStrings(sequences);
             for (ITracker tracker : trackers) {
