@@ -115,7 +115,7 @@ public class CodecConverter<N> {
      * Create dataset directory in targetDir with name in format {original dataset name}_{codec}_{serialized parameters for codec}
      */
     private Path createDatasetDirectory(Path dataset, Path targetDir) throws IOException {
-        String datasetName = createDatasetName(dataset);
+        String datasetName = NamingHelper.createDatasetName(dataset, codec, params, converter);
         Path codecDatasetPath = targetDir.resolve(datasetName);
         createDirIfNeeded(codecDatasetPath);
         return codecDatasetPath;
@@ -126,13 +126,5 @@ public class CodecConverter<N> {
             LOGGER.info(String.format("Creating '%s'", path.toString()));
             Files.createDirectory(path);
         }
-    }
-
-    /**
-     * Create name for dataset folder
-     */
-    private String createDatasetName(Path datasetDir) {
-        String datasetName = datasetDir.getFileName().toString();
-        return String.format("%s_%s_%s", datasetName, codec, converter.serializeParams(params));
     }
 }

@@ -64,7 +64,7 @@ public class DatasetConverter implements IDatasetConverter {
             return;
         }
 
-        // Magic
+        // Convert dataset
         createDatasets(dataset, targetDir, codecs, filesForConversion, groundTruthFolders);
 
         // Delete start formats (thanks list?)
