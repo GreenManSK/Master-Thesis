@@ -46,6 +46,6 @@ public class SimpleTracker implements ITracker {
      * Create command for executing the tracker
      */
     private String createCommand(String dataset, String sequence, int digits) {
-        return String.format("%s %s %s %d", executable.toString(), dataset, sequence, digits);
+        return String.format("%s %s %s %d", executable, dataset, sequence, digits);
     }
 }
