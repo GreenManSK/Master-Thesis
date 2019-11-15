@@ -15,5 +15,11 @@
       "name": "JPEG",
       "params": "50"
     }
+  ],
+  "trackers": [
+    {
+      "name": "KTH-SE (1)",
+      "executableFile": "run.bat"
+    }
   ]
 }
