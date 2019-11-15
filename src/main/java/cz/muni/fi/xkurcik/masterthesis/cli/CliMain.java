@@ -126,7 +126,7 @@ final public class CliMain {
     }
 
     private boolean shouldRun(CommandLine commandLine) {
-        return commandLine.hasOption(CONVERT_ARG_SHORT);
+        return commandLine.hasOption(CONVERT_ARG_SHORT) || commandLine.hasOption(TRACK_ARG_SHORT);
     }
 
     private void printHelp() {
