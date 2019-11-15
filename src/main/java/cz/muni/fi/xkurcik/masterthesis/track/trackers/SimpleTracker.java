@@ -17,12 +17,12 @@ public class SimpleTracker implements ITracker {
 
     private Runtime runtime;
     private String name;
-    private String executable;
+    private Path executable;
 
     public SimpleTracker(Runtime runtime, String name, Path executable) {
         this.runtime = runtime;
         this.name = name;
-        this.executable = executable.toString();
+        this.executable = executable;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class SimpleTracker implements ITracker {
         LOGGER.info(String.format("Running %s on %s - %s", name, dataset, sequence));
         String command = createCommand(dataset, sequence, digits);
         try {
-            Process process = runtime.exec(command);
+            Process process = runtime.exec(command, null, executable.getParent().toFile());
             process.waitFor();
         } catch (IOException | InterruptedException e) {
             LOGGER.error(String.format("Error while running %s on %s - %s", name, dataset, sequence), e);
@@ -46,6 +46,6 @@ public class SimpleTracker implements ITracker {
      * Create command for executing the tracker
      */
     private String createCommand(String dataset, String sequence, int digits) {
-        return String.format("%s %s %s %d", executable, dataset, sequence, digits);
+        return String.format("\"%s\" %s %s %d", executable.toString(), dataset, sequence, digits);
     }
 }
