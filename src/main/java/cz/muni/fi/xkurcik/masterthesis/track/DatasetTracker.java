@@ -73,10 +73,15 @@ public class DatasetTracker implements IDatasetTracker {
                 LOGGER.info(String.format("Tracking %s converted by %s by tracker %s", datasetName, codec.toString(), tracker.getName()));
                 for (String sequence : sequencesList) {
                     tracker.run(datasetName, sequence, filenameLength);
-                    Files.move(
-                            symlinkPath.resolve(NamingHelper.getResultFolderName(sequence)),
-                            symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker))
-                    );
+                    Path resultDir = symlinkPath.resolve(NamingHelper.getResultFolderName(sequence));
+                    if (Files.exists(resultDir)) {
+                        Files.move(
+                                resultDir,
+                                symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker))
+                        );
+                    } else {
+                        LOGGER.error(String.format("Result folder was not created for %s converted by %s by tracker %s sequence %s", datasetName, codec.toString(), tracker.getName(), sequence));
+                    }
                 }
             }
 
