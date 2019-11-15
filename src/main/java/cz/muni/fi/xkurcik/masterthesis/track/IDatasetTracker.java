@@ -27,7 +27,7 @@ public interface IDatasetTracker {
             String datasetName,
             Path datasetPath,
             Path convertedDatasetsDir,
-            List<Pair<Codec, ?>> codecs,
+            List<Pair<Codec, String>> codecs,
             Path trackersDir,
             List<ITracker> trackers
     );

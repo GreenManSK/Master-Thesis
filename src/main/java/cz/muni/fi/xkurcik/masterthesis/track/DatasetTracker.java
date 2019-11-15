@@ -33,7 +33,8 @@ public class DatasetTracker implements IDatasetTracker {
     }
 
     @Override
-    public void track(String datasetName, Path datasetPath, Path convertedDatasetsDir, List<Pair<Codec, ?>> codecs, Path trackersDir, List<ITracker> trackers) {
+    public void track(String datasetName, Path datasetPath, Path convertedDatasetsDir, List<Pair<Codec, String>> codecs, Path trackersDir, List<ITracker> trackers) {
+        LOGGER.info(String.format("Starting tracking for %s", datasetName));
         // Get number of sequences
         int sequences = getNumberOfSequences(datasetPath);
         if (sequences == 0) {

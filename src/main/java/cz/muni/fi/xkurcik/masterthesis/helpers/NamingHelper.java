@@ -23,7 +23,7 @@ public class NamingHelper {
     }
 
     public static String createDatasetName(String datasetName, Codec codec, Object params, IConverter converter) {
-        return String.format("%s_%s_%s", datasetName, codec, converter.serializeParams(params));
+        return String.format("%s_%s_%s", datasetName, codec, params instanceof String ? params : converter.serializeParams(params));
     }
 
     public static List<String> getSequenceStrings(int sequences) {

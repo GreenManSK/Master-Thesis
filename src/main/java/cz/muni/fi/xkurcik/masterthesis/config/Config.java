@@ -14,4 +14,5 @@ public class Config {
     public List<String> datasets = new ArrayList<>();
     public Map<String, String> codecs = new HashMap<>();
     public List<ConverterConfig> converters;
+    public List<TrackerConfig> trackers;
 }
