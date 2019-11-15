@@ -3,6 +3,7 @@ package cz.muni.fi.xkurcik.masterthesis.cli;
 import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.config.JsonConfig;
 import cz.muni.fi.xkurcik.masterthesis.convert.ConvertRunner;
+import cz.muni.fi.xkurcik.masterthesis.track.TrackerRunner;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +34,14 @@ final public class CliMain {
     private static final String DATASETS_ARG_SHORT = "d";
     private static final String DATASETS_ARG_LONG = "datasets";
 
+    private static final String TRACKERS_ARG_SHORT = "o";
+    private static final String TRACKERS_ARG_LONG = "trackersDir";
+
     private static final String CONVERT_ARG_SHORT = "x";
     private static final String CONVERT_ARG_LONG = "convert";
+
+    private static final String TRACK_ARG_SHORT = "w";
+    private static final String TRACK_ARG_LONG = "track";
 
     private static final String DELETE_HELP_FILES_ARG_SHORT = "dh";
     private static final String DELETE_HELP_FILES_ARG_LONG = "deleteHelpFiles";
@@ -70,7 +77,10 @@ final public class CliMain {
             if (commandLine.hasOption(CONVERT_ARG_SHORT)) {
                 runConvert(commandLine, config);
             }
-            // TODO: More
+            if (commandLine.hasOption(TRACK_ARG_SHORT)) {
+                runTracker(commandLine, config);
+            }
+            // @TODO: evaluate
         } catch (ParseException e) {
             System.out.println("Problem while parsing arguments. Try using -h for help");
         } catch (IOException e) {
@@ -94,6 +104,27 @@ final public class CliMain {
         convertRunner.run(datasets, target, false);
     }
 
+    private void runTracker(CommandLine commandLine, Config config) {
+        if (!commandLine.hasOption(DATASETS_ARG_SHORT)) {
+            System.out.println("For running converts needs -" + DATASETS_ARG_SHORT);
+            return;
+        }
+        if (!commandLine.hasOption(TARGET_ARG_SHORT)) {
+            System.out.println("For running converts needs -" + TARGET_ARG_SHORT);
+            return;
+        }
+        if (!commandLine.hasOption(TRACKERS_ARG_SHORT)) {
+            System.out.println("For running converts needs -" + TRACKERS_ARG_SHORT);
+            return;
+        }
+        System.out.println("Running track");
+        Path datasets = Paths.get(commandLine.getOptionValue(DATASETS_ARG_SHORT));
+        Path target = Paths.get(commandLine.getOptionValue(TARGET_ARG_SHORT));
+        Path trackers = Paths.get(commandLine.getOptionValue(TRACKERS_ARG_SHORT));
+        TrackerRunner trackerRunner = new TrackerRunner(Runtime.getRuntime(), config);
+        trackerRunner.run(datasets, target, trackers);
+    }
+
     private boolean shouldRun(CommandLine commandLine) {
         return commandLine.hasOption(CONVERT_ARG_SHORT);
     }
@@ -109,9 +140,11 @@ final public class CliMain {
         options.addOption(HELP_ARG_SHORT, HELP_ARG_LONG, false, "Print help for using this application");
         options.addOption(CONFIG_ARG_SHORT, CONFIG_ARG_LONG, true, "Path to config file, will use config.json if not present");
         options.addOption(CONVERT_ARG_SHORT, CONVERT_ARG_LONG, false, "Run convert, needs dataset directory and target directory");
+        options.addOption(TRACK_ARG_SHORT, TRACK_ARG_LONG, false, "Run tracker, needs dataset directory, target directory and trackers directory");
 
         options.addOption(DATASETS_ARG_SHORT, DATASETS_ARG_LONG, true, "Path to directory with datasets");
         options.addOption(TARGET_ARG_SHORT, TARGET_ARG_LONG, true, "Path to directory where data will be saved");
+        options.addOption(TRACKERS_ARG_SHORT, TRACKERS_ARG_LONG, true, "Path to directory where trackers are");
 
         options.addOption(DELETE_HELP_FILES_ARG_SHORT, DELETE_HELP_FILES_ARG_LONG, false, "Delete help files");
 
