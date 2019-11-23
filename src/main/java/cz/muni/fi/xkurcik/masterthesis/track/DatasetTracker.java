@@ -4,6 +4,7 @@ import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
+import cz.muni.fi.xkurcik.masterthesis.helpers.DatasetHelper;
 import cz.muni.fi.xkurcik.masterthesis.helpers.NamingHelper;
 import cz.muni.fi.xkurcik.masterthesis.helpers.SymlinkHelper;
 import cz.muni.fi.xkurcik.masterthesis.track.trackers.ITracker;
@@ -35,15 +36,14 @@ public class DatasetTracker implements IDatasetTracker {
     @Override
     public void track(String datasetName, Path datasetPath, Path convertedDatasetsDir, List<Pair<Codec, String>> codecs, Path trackersDir, List<ITracker> trackers) {
         LOGGER.info(String.format("Starting tracking for %s", datasetName));
-        // Get number of sequences
-        int sequences = getNumberOfSequences(datasetPath);
+
+        int sequences = DatasetHelper.getNumberOfSequences(datasetPath);
         if (sequences == 0) {
             LOGGER.warn(String.format("No sequence for '%s' exists", datasetName));
             return;
         }
 
-        // Get length for image names
-        int filenameLength = getFilenameLength(datasetPath);
+        int filenameLength = DatasetHelper.getFilenameLength(datasetPath);
         if (filenameLength == 0) {
             LOGGER.warn(String.format("Invalid filenames in '%s'", datasetName));
             return;
@@ -89,37 +89,5 @@ public class DatasetTracker implements IDatasetTracker {
         } catch (IOException e) {
             LOGGER.error(String.format("Problem while tracking %s", datasetName), e);
         }
-    }
-
-    /**
-     * Find the number of digits used for naming image files
-     */
-    private int getFilenameLength(Path datasetPath) {
-        try (Stream<Path> walk = Files.walk(datasetPath)) {
-            Path imageFile = walk
-                    .filter(Files::isRegularFile)
-                    .filter(x -> x.getFileName().toString().toLowerCase().endsWith(Format.TIFF.getExtension()))
-                    .findFirst().orElse(null);
-            return imageFile != null ? FilenameUtils.getBaseName(imageFile.getFileName().toString()).length() - 1 : 0;
-        } catch (IOException e) {
-            LOGGER.error(String.format("Error while getting number of digits for images in '%s'", datasetPath.toString()));
-        }
-        return 0;
-    }
-
-    /**
-     * Get number of sequences in dataset
-     */
-    private int getNumberOfSequences(Path datasetPath) {
-        try (Stream<Path> walk = Files.walk(datasetPath, 1)) {
-            return (int) walk
-                    .skip(1)
-                    .filter(Files::isDirectory)
-                    .filter(x -> x.getFileName().toString().matches("^0+\\d+$"))
-                    .count();
-        } catch (IOException e) {
-            LOGGER.error(String.format("Error while counting sequences in '%s'", datasetPath.toString()));
-        }
-        return 0;
     }
 }

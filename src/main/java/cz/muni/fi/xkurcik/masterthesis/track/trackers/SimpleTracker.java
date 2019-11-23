@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Simple implementation of generic tracker using only one executable to run
@@ -47,5 +48,20 @@ public class SimpleTracker implements ITracker {
      */
     private String createCommand(String dataset, String sequence, int digits) {
         return String.format("\"%s\" %s %s %d", executable.toString(), dataset, sequence, digits);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleTracker that = (SimpleTracker) o;
+        return Objects.equals(getName(), that.getName()) &&
+                Objects.equals(executable, that.executable);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), executable);
     }
 }
