@@ -53,6 +53,10 @@ public class EvaluationResult {
         return tracker;
     }
 
+    public String getSequence() {
+        return sequence;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
