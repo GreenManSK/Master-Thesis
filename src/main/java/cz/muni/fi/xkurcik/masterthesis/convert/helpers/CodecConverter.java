@@ -4,6 +4,7 @@ import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ConversionException;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
+import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
 import cz.muni.fi.xkurcik.masterthesis.helpers.NamingHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -43,8 +44,10 @@ public class CodecConverter<N> {
             Path codecDatasetPath = createDatasetDirectory(dataset, targetDir);
             copyGroundTruth(groundTruthFolders, codecDatasetPath);
             List<Path> convertedImages = convertWithCodec(codecDatasetPath, filesForConversion);
-            convertToTiff(convertedImages);
-            deleteFiles(convertedImages);
+            if (codec.getTargetFormat() != Format.TIFF) {
+                convertToTiff(convertedImages);
+                deleteFiles(convertedImages);
+            }
         } catch (IOException e) {
             LOGGER.error(String.format("Error while converting '%s' using %s", dataset.toString(), codec), e);
         }

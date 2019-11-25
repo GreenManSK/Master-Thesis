@@ -4,6 +4,7 @@ import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.config.ConverterConfig;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.NoneConverter;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ import java.util.List;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Codec {
-    JPEG(Format.PPM, Format.JPEG, JpegConverter.class);
+    JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
+    NONE(Format.TIFF, Format.TIFF, NoneConverter.class);
 
     private Format baseFormat;
     private Format targetFormat;

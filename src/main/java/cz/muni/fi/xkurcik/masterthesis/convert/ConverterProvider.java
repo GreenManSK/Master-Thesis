@@ -4,6 +4,7 @@ import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.NoneConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,7 @@ public class ConverterProvider {
 
     private JpegConverter jpegConverter;
     private ImageMagickConverter imageMagickConverter;
+    private NoneConverter noneConverter;
 
     public ConverterProvider() {
     }
@@ -28,6 +30,7 @@ public class ConverterProvider {
     }
 
     private void fromConfig(Runtime runtime, Config config) {
+        noneConverter = new NoneConverter();
         if (config.codecs.containsKey(JpegConverter.NAME)) {
             jpegConverter = new JpegConverter(runtime, config.codecs.get(JpegConverter.NAME));
         }
@@ -52,6 +55,14 @@ public class ConverterProvider {
         this.imageMagickConverter = imageMagickConverter;
     }
 
+    public NoneConverter getNoneConverter() {
+        return noneConverter;
+    }
+
+    public void setNoneConverter(NoneConverter noneConverter) {
+        this.noneConverter = noneConverter;
+    }
+
     /**
      * Get converter by codec
      */
@@ -59,6 +70,8 @@ public class ConverterProvider {
         switch (codec) {
             case JPEG:
                 return jpegConverter;
+            case NONE:
+                return noneConverter;
             default:
                 String msg = String.format("Codec %s dose not have converter assigned", codec.toString());
                 LOGGER.error(msg);
