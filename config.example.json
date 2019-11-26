@@ -5,20 +5,21 @@
   "codecs": {
     "IMAGE_MAGIC": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
     "JPEG": "C:/jpeg.exe",
-    "FLIF": "C:/flif.exe"
+    "FLIF": "C:/flif.exe",
+    "JPEG_XR": "C:/JXREncApp.exe"
   },
   "converters": [
     {
       "name": "JPEG",
-      "params": "1"
-    },
-    {
-      "name": "JPEG",
-      "params": "50"
+      "params": "80"
     },
     {
       "name": "FLIF",
       "params": "80"
+    },
+    {
+      "name": "JPEG_XR",
+      "params": "0.8"
     },
     {
       "name": "NONE",

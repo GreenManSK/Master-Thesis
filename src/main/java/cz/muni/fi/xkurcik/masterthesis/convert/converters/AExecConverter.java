@@ -35,6 +35,7 @@ public abstract class AExecConverter<N> implements IConverter<N> {
 
     protected void checkErrors(String source, Process process) throws ConversionException, IOException {
         if (process.exitValue() != 0) {
+            // TODO: Log error output
             throw new ConversionException(String.format("Unknow problem while converting %s, exit code %d", source, process.exitValue()));
         }
         try (InputStream is = process.getErrorStream()) {

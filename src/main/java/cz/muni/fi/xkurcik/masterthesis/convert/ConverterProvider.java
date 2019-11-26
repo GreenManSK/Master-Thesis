@@ -18,6 +18,7 @@ public class ConverterProvider {
     private FlifConverter flifConverter;
     private ImageMagickConverter imageMagickConverter;
     private JpegConverter jpegConverter;
+    private JpegXrConverter jpegXrConverter;
     private NoneConverter noneConverter;
 
     public ConverterProvider() {
@@ -34,6 +35,9 @@ public class ConverterProvider {
         }
         if (config.codecs.containsKey(JpegConverter.NAME)) {
             jpegConverter = new JpegConverter(runtime, config.codecs.get(JpegConverter.NAME));
+        }
+        if (config.codecs.containsKey(JpegXrConverter.NAME)) {
+            jpegXrConverter = new JpegXrConverter(runtime, config.codecs.get(JpegXrConverter.NAME));
         }
         if (config.codecs.containsKey(ImageMagickConverter.NAME)) {
             imageMagickConverter = new ImageMagickConverter(runtime, config.codecs.get(ImageMagickConverter.NAME));
@@ -54,6 +58,14 @@ public class ConverterProvider {
 
     public void setJpegConverter(JpegConverter jpegConverter) {
         this.jpegConverter = jpegConverter;
+    }
+
+    public JpegXrConverter getJpegXrConverter() {
+        return jpegXrConverter;
+    }
+
+    public void setJpegXrConverter(JpegXrConverter jpegXrConverter) {
+        this.jpegXrConverter = jpegXrConverter;
     }
 
     public ImageMagickConverter getImageMagickConverter() {
@@ -81,6 +93,8 @@ public class ConverterProvider {
                 return flifConverter;
             case JPEG:
                 return jpegConverter;
+            case JPEG_XR:
+                return jpegXrConverter;
             case NONE:
                 return noneConverter;
             default:

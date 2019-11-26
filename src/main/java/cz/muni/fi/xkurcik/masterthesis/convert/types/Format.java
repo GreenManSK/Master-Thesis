@@ -9,6 +9,7 @@ public enum Format {
     TIFF(".tif"),
     PPM(".ppm"),
     JPEG(".jpeg"),
+    JPEG_XR(".jxr"),
     FLIF(".flif");
 
     private final String extension;
