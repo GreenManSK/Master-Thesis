@@ -18,7 +18,8 @@ public enum Codec {
     JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
     JPEG_XR(Format.PPM, Format.JPEG_XR, JpegXrConverter.class),
     OPEN_JPEG(Format.PPM, Format.JPEG_2000, OpenJpegConverter.class),
-    NONE(Format.TIFF, Format.TIFF, NoneConverter.class);
+    NONE(Format.TIFF, Format.TIFF, NoneConverter.class),
+    PGF(Format.PPM, Format.PGF, PgfConverter.class);
 
     private Format baseFormat;
     private Format targetFormat;

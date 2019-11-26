@@ -48,9 +48,7 @@ public class OpenJpegConverter extends AExecConverter<Integer> {
     }
 
     private String constructCommand(String source, String target, Integer quality) throws ConversionException {
-        if (quality > 100 || quality < 0) {
-            throw new ConversionException("Quality parameter must be in range 1 to 100");
-        }
+        // TODO: Quality check
         return String.format("%s -i %s -o %s -q %d", executable, source, target, quality);
     }
 }

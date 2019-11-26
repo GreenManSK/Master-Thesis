@@ -1,5 +1,7 @@
 package cz.muni.fi.xkurcik.masterthesis.convert.types;
 
+import java.nio.file.Path;
+
 /**
  * Supported image formats
  *
@@ -11,7 +13,8 @@ public enum Format {
     JPEG(".jpeg"),
     JPEG_XR(".jxr"),
     JPEG_2000(".j2k"),
-    FLIF(".flif");
+    FLIF(".flif"),
+    PGF(".pgf");
 
     private final String extension;
 
@@ -21,5 +24,15 @@ public enum Format {
 
     public String getExtension() {
         return extension;
+    }
+
+    /**
+     * Check if the file has file extension of the format
+     *
+     * @param file path to the file
+     * @return true if file has same extension as the format
+     */
+    public boolean isFormat(Path file) {
+        return file.toString().endsWith(extension);
     }
 }

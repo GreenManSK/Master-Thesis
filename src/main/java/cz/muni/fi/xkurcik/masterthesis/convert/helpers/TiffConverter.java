@@ -3,6 +3,7 @@ package cz.muni.fi.xkurcik.masterthesis.convert.helpers;
 import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ConversionException;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.PgfConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,11 +38,16 @@ public class TiffConverter {
      * Converts image to tif file and returns path to the new file
      */
     public static Path toTiff(Path source, ConverterProvider converterProvider) throws ConversionException {
-        ImageMagickConverter converter = converterProvider.getImageMagickConverter();
         Path targetPath = PathsHelper.changeFileExtension(source, Format.TIFF.getExtension());
         LOGGER.debug(String.format("Converting '%s' to %s", source.toString(), Format.TIFF));
         if (!Files.exists(targetPath)) {
-            converter.convert(source.toString(), targetPath.toString(), COMPRESS_NONE);
+            if (Format.PGF.isFormat(source)) {
+                PgfConverter converter = converterProvider.getPgfConverter();
+                converter.convert(source.toString(), targetPath.toString(), new PgfConverter.Config(true, 0));
+            } else {
+                ImageMagickConverter converter = converterProvider.getImageMagickConverter();
+                converter.convert(source.toString(), targetPath.toString(), COMPRESS_NONE);
+            }
         }
         return targetPath;
     }

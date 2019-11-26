@@ -7,7 +7,8 @@
     "JPEG": "C:/jpeg.exe",
     "FLIF": "C:/flif.exe",
     "JPEG_XR": "C:/JXREncApp.exe",
-    "OPEN_JPEG": "C:/opj_compress.exe"
+    "OPEN_JPEG": "C:/opj_compress.exe",
+    "PGF": "C:/PGFConsole.exe"
   },
   "converters": [
     {
@@ -25,6 +26,10 @@
     {
       "name": "OPEN_JPEG",
       "params": "55"
+    },
+    {
+      "name": "PGF",
+      "params": "2"
     },
     {
       "name": "NONE",

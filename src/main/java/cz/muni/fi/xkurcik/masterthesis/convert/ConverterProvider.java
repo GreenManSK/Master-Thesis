@@ -21,6 +21,7 @@ public class ConverterProvider {
     private JpegXrConverter jpegXrConverter;
     private OpenJpegConverter openJpegConverter;
     private NoneConverter noneConverter;
+    private PgfConverter pgfConverter;
 
     public ConverterProvider() {
     }
@@ -45,6 +46,9 @@ public class ConverterProvider {
         }
         if (config.codecs.containsKey(OpenJpegConverter.NAME)) {
             openJpegConverter = new OpenJpegConverter(runtime, config.codecs.get(OpenJpegConverter.NAME));
+        }
+        if (config.codecs.containsKey(PgfConverter.NAME)) {
+            pgfConverter = new PgfConverter(runtime, config.codecs.get(PgfConverter.NAME));
         }
     }
 
@@ -80,6 +84,14 @@ public class ConverterProvider {
         this.openJpegConverter = openJpegConverter;
     }
 
+    public PgfConverter getPgfConverter() {
+        return pgfConverter;
+    }
+
+    public void setPgfConverter(PgfConverter pgfConverter) {
+        this.pgfConverter = pgfConverter;
+    }
+
     public ImageMagickConverter getImageMagickConverter() {
         return imageMagickConverter;
     }
@@ -111,6 +123,8 @@ public class ConverterProvider {
                 return openJpegConverter;
             case NONE:
                 return noneConverter;
+            case PGF:
+                return pgfConverter;
             default:
                 String msg = String.format("Codec %s dose not have converter assigned", codec.toString());
                 LOGGER.error(msg);
