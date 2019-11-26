@@ -4,7 +4,8 @@
   ],
   "codecs": {
     "IMAGE_MAGIC": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
-    "JPEG": "C:/jpeg.exe"
+    "JPEG": "C:/jpeg.exe",
+    "FLIF": "C:/flif.exe"
   },
   "converters": [
     {
@@ -14,6 +15,14 @@
     {
       "name": "JPEG",
       "params": "50"
+    },
+    {
+      "name": "FLIF",
+      "params": "80"
+    },
+    {
+      "name": "NONE",
+      "params": ""
     }
   ],
   "trackers": [

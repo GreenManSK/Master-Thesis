@@ -1,10 +1,7 @@
 package cz.muni.fi.xkurcik.masterthesis.convert;
 
 import cz.muni.fi.xkurcik.masterthesis.config.Config;
-import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
-import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
-import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
-import cz.muni.fi.xkurcik.masterthesis.convert.converters.NoneConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.*;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +15,9 @@ public class ConverterProvider {
 
     private static final Logger LOGGER = LogManager.getLogger(ConverterProvider.class.getName());
 
-    private JpegConverter jpegConverter;
+    private FlifConverter flifConverter;
     private ImageMagickConverter imageMagickConverter;
+    private JpegConverter jpegConverter;
     private NoneConverter noneConverter;
 
     public ConverterProvider() {
@@ -31,12 +29,23 @@ public class ConverterProvider {
 
     private void fromConfig(Runtime runtime, Config config) {
         noneConverter = new NoneConverter();
+        if (config.codecs.containsKey(FlifConverter.NAME)) {
+            flifConverter = new FlifConverter(runtime, config.codecs.get(FlifConverter.NAME));
+        }
         if (config.codecs.containsKey(JpegConverter.NAME)) {
             jpegConverter = new JpegConverter(runtime, config.codecs.get(JpegConverter.NAME));
         }
         if (config.codecs.containsKey(ImageMagickConverter.NAME)) {
             imageMagickConverter = new ImageMagickConverter(runtime, config.codecs.get(ImageMagickConverter.NAME));
         }
+    }
+
+    public FlifConverter getFlifConverter() {
+        return flifConverter;
+    }
+
+    public void setFlifConverter(FlifConverter flifConverter) {
+        this.flifConverter = flifConverter;
     }
 
     public JpegConverter getJpegConverter() {
@@ -68,6 +77,8 @@ public class ConverterProvider {
      */
     public IConverter getByCodec(Codec codec) {
         switch (codec) {
+            case FLIF:
+                return flifConverter;
             case JPEG:
                 return jpegConverter;
             case NONE:

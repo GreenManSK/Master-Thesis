@@ -2,6 +2,7 @@ package cz.muni.fi.xkurcik.masterthesis.convert.types;
 
 import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.config.ConverterConfig;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.FlifConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.JpegConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.NoneConverter;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Codec {
+    FLIF(Format.PPM, Format.FLIF, FlifConverter.class),
     JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
     NONE(Format.TIFF, Format.TIFF, NoneConverter.class);
 
