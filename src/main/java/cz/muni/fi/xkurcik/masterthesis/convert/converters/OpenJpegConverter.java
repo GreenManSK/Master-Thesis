@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Converter ppm images to jpeg using https://github.com/thorfdbg/libjpeg
+ * Converter ppm images to j2k using OpenJPEG
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
-public class JpegConverter extends AExecConverter<Integer> {
+public class OpenJpegConverter extends AExecConverter<Integer> {
 
-    private static final Logger LOGGER = LogManager.getLogger(JpegConverter.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(OpenJpegConverter.class.getName());
 
-    public static final String NAME = "JPEG";
+    public static final String NAME = "OPEN_JPEG";
 
-    public JpegConverter(Runtime runtime, String executable) {
+    public OpenJpegConverter(Runtime runtime, String executable) {
         super(runtime, executable);
     }
 
@@ -51,6 +51,6 @@ public class JpegConverter extends AExecConverter<Integer> {
         if (quality > 100 || quality < 0) {
             throw new ConversionException("Quality parameter must be in range 1 to 100");
         }
-        return String.format("%s -q %d %s %s", executable, quality, source, target);
+        return String.format("%s -i %s -o %s -q %d", executable, source, target, quality);
     }
 }

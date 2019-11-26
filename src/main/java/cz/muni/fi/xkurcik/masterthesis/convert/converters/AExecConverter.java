@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
  * Converter that uses Runtime and exec to convert images
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
+ * @TODO: Refactor subclasses and change their javadoc
  */
 public abstract class AExecConverter<N> implements IConverter<N> {
 
@@ -40,7 +41,7 @@ public abstract class AExecConverter<N> implements IConverter<N> {
         }
         try (InputStream is = process.getErrorStream()) {
             String errors = IOUtils.toString(is, Charset.defaultCharset());
-            if (!Strings.isNullOrEmpty(errors)) {
+            if (!Strings.isNullOrEmpty(errors != null ? errors.trim() : null)) {
                 throw new ConversionException(String.format("Error while converting %s: %s", source, errors));
             }
         }

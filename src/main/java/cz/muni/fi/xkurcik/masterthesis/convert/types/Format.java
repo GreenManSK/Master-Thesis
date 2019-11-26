@@ -10,6 +10,7 @@ public enum Format {
     PPM(".ppm"),
     JPEG(".jpeg"),
     JPEG_XR(".jxr"),
+    JPEG_2000(".j2k"),
     FLIF(".flif");
 
     private final String extension;

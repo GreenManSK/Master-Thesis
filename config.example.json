@@ -6,7 +6,8 @@
     "IMAGE_MAGIC": "C:/Program Files/ImageMagick-7.0.9-Q16/magick",
     "JPEG": "C:/jpeg.exe",
     "FLIF": "C:/flif.exe",
-    "JPEG_XR": "C:/JXREncApp.exe"
+    "JPEG_XR": "C:/JXREncApp.exe",
+    "OPEN_JPEG": "C:/opj_compress.exe"
   },
   "converters": [
     {
@@ -20,6 +21,10 @@
     {
       "name": "JPEG_XR",
       "params": "0.8"
+    },
+    {
+      "name": "OPEN_JPEG",
+      "params": "55"
     },
     {
       "name": "NONE",

@@ -19,6 +19,7 @@ public class ConverterProvider {
     private ImageMagickConverter imageMagickConverter;
     private JpegConverter jpegConverter;
     private JpegXrConverter jpegXrConverter;
+    private OpenJpegConverter openJpegConverter;
     private NoneConverter noneConverter;
 
     public ConverterProvider() {
@@ -41,6 +42,9 @@ public class ConverterProvider {
         }
         if (config.codecs.containsKey(ImageMagickConverter.NAME)) {
             imageMagickConverter = new ImageMagickConverter(runtime, config.codecs.get(ImageMagickConverter.NAME));
+        }
+        if (config.codecs.containsKey(OpenJpegConverter.NAME)) {
+            openJpegConverter = new OpenJpegConverter(runtime, config.codecs.get(OpenJpegConverter.NAME));
         }
     }
 
@@ -66,6 +70,14 @@ public class ConverterProvider {
 
     public void setJpegXrConverter(JpegXrConverter jpegXrConverter) {
         this.jpegXrConverter = jpegXrConverter;
+    }
+
+    public OpenJpegConverter getOpenJpegConverter() {
+        return openJpegConverter;
+    }
+
+    public void setOpenJpegConverter(OpenJpegConverter openJpegConverter) {
+        this.openJpegConverter = openJpegConverter;
     }
 
     public ImageMagickConverter getImageMagickConverter() {
@@ -95,6 +107,8 @@ public class ConverterProvider {
                 return jpegConverter;
             case JPEG_XR:
                 return jpegXrConverter;
+            case OPEN_JPEG:
+                return openJpegConverter;
             case NONE:
                 return noneConverter;
             default:

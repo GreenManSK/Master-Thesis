@@ -17,6 +17,7 @@ public enum Codec {
     FLIF(Format.PPM, Format.FLIF, FlifConverter.class),
     JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
     JPEG_XR(Format.PPM, Format.JPEG_XR, JpegXrConverter.class),
+    OPEN_JPEG(Format.PPM, Format.JPEG_2000, OpenJpegConverter.class),
     NONE(Format.TIFF, Format.TIFF, NoneConverter.class);
 
     private Format baseFormat;
