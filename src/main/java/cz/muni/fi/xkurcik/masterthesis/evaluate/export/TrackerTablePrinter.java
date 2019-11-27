@@ -23,8 +23,12 @@ public class TrackerTablePrinter {
         this.printer = printer;
     }
 
+
     /**
-     * @TODO
+     * Write table with results for specified tracker into the csv file.
+     * @param trackerName Name of the tracker
+     * @param results List of results for the tracker
+     * @throws IOException if any problem while working with IO
      */
     public void print(String trackerName, List<EvaluationResult> results) throws IOException {
         // Split by params

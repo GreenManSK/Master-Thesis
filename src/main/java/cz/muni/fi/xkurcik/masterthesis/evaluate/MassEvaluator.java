@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,7 +43,14 @@ public class MassEvaluator {
     }
 
     /**
-     * @TODO comments
+     * Run evaluation on results for provided converted datasets tracked by provided trackers
+     *
+     * @param datasetsPath      Path to original datasets
+     * @param datasets          List of datasets to be evaluated
+     * @param convertedDatasets Path to converted datasets
+     * @param codecs            List of codecs used for conversion
+     * @param trackers          List of trackers used for tracking
+     * @return List of results
      */
     public List<EvaluationResult> evaluate(
             Path datasetsPath,
@@ -62,7 +70,7 @@ public class MassEvaluator {
     }
 
     /**
-     * @TODO comments
+     * Evaluates dataset and saves its result
      */
     private List<EvaluationResult> evaluateDataset(
             Path datasetsPath,
@@ -70,7 +78,7 @@ public class MassEvaluator {
             Path convertedDatasets,
             List<Pair<Codec, String>> codecs,
             List<ITracker> trackers) {
-        List<EvaluationResult> results = new ArrayList<>();
+        List<EvaluationResult> results = Collections.synchronizedList(new ArrayList<>());
         Path datasetPath = datasetsPath.resolve(datasetName);
 
         int sequences = DatasetHelper.getNumberOfSequences(datasetPath);
@@ -87,17 +95,20 @@ public class MassEvaluator {
 
         List<String> sequencesList = NamingHelper.getSequenceStrings(sequences);
         LOGGER.info(String.format("Evaluating results for dataset %s", datasetName));
-        // @TODO: Paralelize this loop - make sure list is not broken in threads
-        for (Pair<Codec, String> codec : codecs) {
+
+        codecs.parallelStream().forEach((codec) -> {
+            List<EvaluationResult> partialResult = new ArrayList<>();
             for (ITracker tracker : trackers) {
                 for (String sequence : sequencesList) {
                     EvaluationResult result = evaluateSequence(datasetName, convertedDatasets, filenameLength, codec, tracker, sequence);
                     if (result != null) {
-                        results.add(result);
+                        partialResult.add(result);
                     }
                 }
             }
-        }
+            results.addAll(partialResult);
+        });
+
         return results;
     }
 
