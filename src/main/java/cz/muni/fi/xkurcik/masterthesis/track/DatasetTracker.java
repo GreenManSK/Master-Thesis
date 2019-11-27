@@ -3,13 +3,11 @@ package cz.muni.fi.xkurcik.masterthesis.track;
 import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.IConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
-import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
 import cz.muni.fi.xkurcik.masterthesis.helpers.DatasetHelper;
 import cz.muni.fi.xkurcik.masterthesis.helpers.NamingHelper;
 import cz.muni.fi.xkurcik.masterthesis.helpers.SymlinkHelper;
 import cz.muni.fi.xkurcik.masterthesis.track.trackers.ITracker;
 import javafx.util.Pair;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Basic implementation of IDatasetTracker
@@ -59,7 +56,6 @@ public class DatasetTracker implements IDatasetTracker {
      * Run all trackers on dataset converted using provided codec
      */
     private void trackCodec(String datasetName, Path datasetsDir, Codec codec, Object codecParams, int sequences, int filenameLength, Path trackersDir, List<ITracker> trackers) {
-        // @TODO: Refactor/Split
         IConverter converter = converterProvider.getByCodec(codec);
         String convertedDatasetName = NamingHelper.createDatasetName(datasetName, codec, codecParams, converter);
 
@@ -71,23 +67,30 @@ public class DatasetTracker implements IDatasetTracker {
             List<String> sequencesList = NamingHelper.getSequenceStrings(sequences);
             for (ITracker tracker : trackers) {
                 LOGGER.info(String.format("Tracking %s converted by %s by tracker %s", datasetName, codec.toString(), tracker.getName()));
-                for (String sequence : sequencesList) {
-                    tracker.run(datasetName, sequence, filenameLength);
-                    Path resultDir = symlinkPath.resolve(NamingHelper.getResultFolderName(sequence));
-                    if (Files.exists(resultDir)) {
-                        Files.move(
-                                resultDir,
-                                symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker))
-                        );
-                    } else {
-                        LOGGER.error(String.format("Result folder was not created for %s converted by %s by tracker %s sequence %s", datasetName, codec.toString(), tracker.getName(), sequence));
-                    }
-                }
+                trackTracker(datasetName, filenameLength, symlinkPath, sequencesList, tracker);
             }
 
             SymlinkHelper.deleteSymlink(symlinkPath);
         } catch (IOException e) {
             LOGGER.error(String.format("Problem while tracking %s", datasetName), e);
+        }
+    }
+
+    /**
+     * Track with tracker
+     */
+    private void trackTracker(String datasetName, int filenameLength, Path symlinkPath, List<String> sequencesList, ITracker tracker) throws IOException {
+        for (String sequence : sequencesList) {
+            tracker.run(datasetName, sequence, filenameLength);
+            Path resultDir = symlinkPath.resolve(NamingHelper.getResultFolderName(sequence));
+            if (Files.exists(resultDir)) {
+                Files.move(
+                        resultDir,
+                        symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker))
+                );
+            } else {
+                LOGGER.error(String.format("Result folder was not created for %s by tracker %s sequence %s", datasetName, tracker.getName(), sequence));
+            }
         }
     }
 }
