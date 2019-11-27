@@ -11,9 +11,16 @@ import java.util.List;
  * Builds trackers from configuration
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
- * @TODO: Comments
  */
 public class TrackerBuilder {
+    /**
+     * Build list of trackers
+     *
+     * @param runtime     Runtime for running commands
+     * @param config      Application configuration
+     * @param trackersDir Parent directory for all trackers
+     * @return List of trackers
+     */
     public static List<ITracker> buildTrackers(Runtime runtime, Config config, Path trackersDir) {
         List<ITracker> trackers = new ArrayList<>();
         for (TrackerConfig trackerConfig : config.trackers) {
