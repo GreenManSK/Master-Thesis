@@ -86,7 +86,7 @@ public class CsvConverterExporter implements ResultExporter {
         Map<String, List<EvaluationResult>> trackers = splitByTracker(results);
         try (
                 FileWriter fw = new FileWriter(datasetFile.toString());
-                CSVPrinter printer = new CSVPrinter(fw, CSVFormat.DEFAULT)
+                CSVPrinter printer = new CSVPrinter(fw, CSVFormat.EXCEL)
         ) {
             LOGGER.info(String.format("Writing to '%s'", datasetFile.toString()));
             printDatasetHeader(printer, converterName, datasetName);
