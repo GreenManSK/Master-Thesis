@@ -26,11 +26,11 @@ public class PgfConverter extends AExecConverter<PgfConverter.Config> {
 
     @Override
     protected String constructCommand(String source, String target, Config params) throws ConversionException {
-        if (params.getQuality() > 30 || params.getQuality() < 1) {
-            throw new ConversionException("Quality parameter must be in range 1 to 30");
-        }
         if (params.isDecode()) {
             return String.format("%s -d %s %s", executable, source, target);
+        }
+        if (params.getQuality() > 30 || params.getQuality() < 1) {
+            throw new ConversionException("Quality parameter must be in range 1 to 30");
         }
         return String.format("%s -e -q %d %s %s", executable, params.getQuality(), source, target);
     }
