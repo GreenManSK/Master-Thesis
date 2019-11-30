@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Export results for each converter into separate directory. In the directory in creates .csv file for each dataset.
+ * Export results for each converter into separate directory. In the directory it creates .csv file for each dataset.
  * Path format: {converter}/{dataset}.csv
  * In the .csv file there is separate table for each tracker.
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
-public class DatasetPerConverterExporter implements ResultExporter {
+public class DatasetPerConverterExporter extends AResultExporter {
     private static final Logger LOGGER = LogManager.getLogger(DatasetPerConverterExporter.class);
 
     private static final String FILENAME_FORMAT = "%s.csv";
@@ -35,34 +34,10 @@ public class DatasetPerConverterExporter implements ResultExporter {
     @Override
     public void export(List<EvaluationResult> results, Path outputDirectory) throws IOException {
         createOutputDir(outputDirectory);
-        Map<String, Map<String, List<EvaluationResult>>> converterMap = parseResults(results);
+        Map<String, Map<String, List<EvaluationResult>>> converterMap = parseResults(results, (r) -> r.getCodec().getKey().name());
         for (Map.Entry<String, Map<String, List<EvaluationResult>>> converter : converterMap.entrySet()) {
             exportConverter(converter.getKey(), converter.getValue(), outputDirectory);
         }
-    }
-
-    /**
-     * Separate results for easier exporting to csv files
-     *
-     * @param results list of results
-     * @return Map in format {converter name} => {dataset name} => list of results for this converter and dataset
-     */
-    private Map<String, Map<String, List<EvaluationResult>>> parseResults(List<EvaluationResult> results) {
-        Map<String, Map<String, List<EvaluationResult>>> converterMap = new HashMap<>();
-        for (EvaluationResult result : results) {
-            String converter = result.getCodec().getKey().name();
-            if (!converterMap.containsKey(converter)) {
-                converterMap.put(converter, new HashMap<>());
-            }
-
-            Map<String, List<EvaluationResult>> datasetMap = converterMap.get(converter);
-            String dataset = result.getDataset();
-            if (!datasetMap.containsKey(dataset)) {
-                datasetMap.put(dataset, new ArrayList<>());
-            }
-            datasetMap.get(dataset).add(result);
-        }
-        return converterMap;
     }
 
     /**
@@ -126,14 +101,5 @@ public class DatasetPerConverterExporter implements ResultExporter {
     private void printTrackerTable(CSVPrinter printer, String trackerName, List<EvaluationResult> results) throws IOException {
         TrackerTablePrinter trackerTablePrinter = new TrackerTablePrinter(printer);
         trackerTablePrinter.print(trackerName, results, false);
-    }
-
-    /**
-     * Tries to create output directory if it dose not exists
-     */
-    private void createOutputDir(Path outputDirectory) throws IOException {
-        if (!Files.exists(outputDirectory)) {
-            Files.createDirectories(outputDirectory);
-        }
     }
 }

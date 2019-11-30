@@ -14,11 +14,11 @@ import java.util.List;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Codec {
+    NONE(Format.TIFF, Format.TIFF, NoneConverter.class),
     FLIF(Format.PPM, Format.FLIF, FlifConverter.class),
     JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
     JPEG_XR(Format.PPM, Format.JPEG_XR, JpegXrConverter.class),
     OPEN_JPEG(Format.PPM, Format.JPEG_2000, OpenJpegConverter.class),
-    NONE(Format.TIFF, Format.TIFF, NoneConverter.class),
     PGF(Format.PPM, Format.PGF, PgfConverter.class);
 
     private Format baseFormat;

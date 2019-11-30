@@ -5,10 +5,7 @@ import cz.muni.fi.xkurcik.masterthesis.evaluate.evaluators.Evaluator;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Prints table of results for one tracker used on datasets converted by one converter
@@ -34,7 +31,7 @@ public class TrackerTablePrinter {
      */
     public void print(String tableName, List<EvaluationResult> results, boolean printCodecName) throws IOException {
         // Split by params
-        Map<String, List<EvaluationResult>> paramMap = splitByParams(results);
+        Map<String, List<EvaluationResult>> paramMap = splitByParams(results, printCodecName);
         // Get list of sequence names
         List<String> sequences = getSequenceList(paramMap);
         // Print header
@@ -66,11 +63,7 @@ public class TrackerTablePrinter {
      * Print table row
      */
     private void printRow(String params, List<EvaluationResult> results, boolean printCodecName) throws IOException {
-        if (printCodecName) {
-            printer.print(String.format("%s(%s)", results.get(0).getCodec().getKey(), params));
-        } else {
-            printer.print(params);
-        }
+        printer.print(getRowId(results.get(0), printCodecName));
 
         for (EvaluationResult result : results) {
             for (Evaluator evaluator : Evaluator.values()) {
@@ -84,10 +77,10 @@ public class TrackerTablePrinter {
     /**
      * Split results by parameters
      */
-    private Map<String, List<EvaluationResult>> splitByParams(List<EvaluationResult> results) {
-        Map<String, List<EvaluationResult>> paramMap = new HashMap<>();
+    private Map<String, List<EvaluationResult>> splitByParams(List<EvaluationResult> results, boolean printCodecName) {
+        Map<String, List<EvaluationResult>> paramMap = new LinkedHashMap<>();
         for (EvaluationResult result : results) {
-            String param = result.getCodec().getValue();
+            String param = getRowId(result, printCodecName);
             if (!paramMap.containsKey(param)) {
                 paramMap.put(param, new ArrayList<>());
             }
@@ -106,5 +99,13 @@ public class TrackerTablePrinter {
             sequences.add(result.getSequence());
         }
         return sequences;
+    }
+
+    /**
+     * Get id for row as combination of codec and parameter
+     */
+    private String getRowId(EvaluationResult result, boolean printCodecName) {
+        String param = result.getCodec().getValue();
+        return printCodecName ? String.format("%s(%s)", result.getCodec().getKey(), param) : param;
     }
 }

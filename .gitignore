@@ -4,5 +4,6 @@
 *.iml
 target/*
 out*/
-.log
+*.log
+run.bat
 config.json
