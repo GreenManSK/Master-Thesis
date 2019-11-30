@@ -26,20 +26,22 @@ public class TrackerTablePrinter {
 
     /**
      * Write table with results for specified tracker into the csv file.
-     * @param trackerName Name of the tracker
-     * @param results List of results for the tracker
+     *
+     * @param tableName      Name of the table (printed in the corner)
+     * @param results        List of results for the tracker
+     * @param printCodecName Print codec name with parameters
      * @throws IOException if any problem while working with IO
      */
-    public void print(String trackerName, List<EvaluationResult> results) throws IOException {
+    public void print(String tableName, List<EvaluationResult> results, boolean printCodecName) throws IOException {
         // Split by params
         Map<String, List<EvaluationResult>> paramMap = splitByParams(results);
         // Get list of sequence names
         List<String> sequences = getSequenceList(paramMap);
         // Print header
-        printHeader(trackerName, sequences);
+        printHeader(tableName, sequences);
         // Print param row
         for (Map.Entry<String, List<EvaluationResult>> paramRow : paramMap.entrySet()) {
-            printRow(paramRow.getKey(), paramRow.getValue());
+            printRow(paramRow.getKey(), paramRow.getValue(), printCodecName);
         }
 
         printer.printRecord();
@@ -48,8 +50,8 @@ public class TrackerTablePrinter {
     /**
      * Print table header
      */
-    private void printHeader(String trackerName, List<String> sequences) throws IOException {
-        printer.print(trackerName);
+    private void printHeader(String tableName, List<String> sequences) throws IOException {
+        printer.print(tableName);
 
         for (String sequence : sequences) {
             for (Evaluator evaluator : Evaluator.values()) {
@@ -63,8 +65,12 @@ public class TrackerTablePrinter {
     /**
      * Print table row
      */
-    private void printRow(String prams, List<EvaluationResult> results) throws IOException {
-        printer.print(prams);
+    private void printRow(String params, List<EvaluationResult> results, boolean printCodecName) throws IOException {
+        if (printCodecName) {
+            printer.print(String.format("%s(%s)", results.get(0).getCodec().getKey(), params));
+        } else {
+            printer.print(params);
+        }
 
         for (EvaluationResult result : results) {
             for (Evaluator evaluator : Evaluator.values()) {

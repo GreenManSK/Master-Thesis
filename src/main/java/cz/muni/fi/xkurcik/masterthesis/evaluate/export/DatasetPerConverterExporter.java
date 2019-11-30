@@ -22,14 +22,14 @@ import java.util.Map;
  *
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
-public class CsvConverterExporter implements ResultExporter {
-    private static final Logger LOGGER = LogManager.getLogger(CsvConverterExporter.class);
+public class DatasetPerConverterExporter implements ResultExporter {
+    private static final Logger LOGGER = LogManager.getLogger(DatasetPerConverterExporter.class);
 
     private static final String FILENAME_FORMAT = "%s.csv";
     private static final String CONVERTER_HEADER_NAME = "Converter: %s";
     private static final String DATASET_HEADER_NAME = "Dataset: %s";
 
-    public CsvConverterExporter() {
+    public DatasetPerConverterExporter() {
     }
 
     @Override
@@ -125,7 +125,7 @@ public class CsvConverterExporter implements ResultExporter {
      */
     private void printTrackerTable(CSVPrinter printer, String trackerName, List<EvaluationResult> results) throws IOException {
         TrackerTablePrinter trackerTablePrinter = new TrackerTablePrinter(printer);
-        trackerTablePrinter.print(trackerName, results);
+        trackerTablePrinter.print(trackerName, results, false);
     }
 
     /**

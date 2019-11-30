@@ -5,7 +5,7 @@ import cz.muni.fi.xkurcik.masterthesis.cli.ICliRunner;
 import cz.muni.fi.xkurcik.masterthesis.config.Config;
 import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Codec;
-import cz.muni.fi.xkurcik.masterthesis.evaluate.export.CsvConverterExporter;
+import cz.muni.fi.xkurcik.masterthesis.evaluate.export.DatasetPerConverterExporter;
 import cz.muni.fi.xkurcik.masterthesis.track.trackers.ITracker;
 import cz.muni.fi.xkurcik.masterthesis.track.trackers.TrackerBuilder;
 import javafx.util.Pair;
@@ -70,7 +70,7 @@ public class EvaluateRunner implements ICliRunner {
 
         List<EvaluationResult> results = evaluator.evaluate(datasetsDir, config.datasets, convertedDatasetsDir, codecs, trackers);
 
-        CsvConverterExporter csvConverterExporter = new CsvConverterExporter();
+        DatasetPerConverterExporter csvConverterExporter = new DatasetPerConverterExporter();
         try {
             csvConverterExporter.export(results, resultsDir);
         } catch (IOException e) {
