@@ -19,7 +19,8 @@ import java.nio.file.Path;
 public class TiffConverter {
     private static final Logger LOGGER = LogManager.getLogger(TiffConverter.class);
 
-    private static final String COMPRESS_NONE = "";//"-compress none";
+    private static final String COMPRESS_NONE = "";
+    private static final String ADJUST_COLOR = "-auto-level";
 
     /**
      * Converts .tif file to specified format and returns path to the new file with correct file extension
@@ -29,7 +30,7 @@ public class TiffConverter {
         ImageMagickConverter converter = converterProvider.getImageMagickConverter();
         Path targetPath = PathsHelper.changeFileExtension(source, target.getExtension());
         if (!Files.exists(targetPath)) {
-            converter.convert(source.toString(), targetPath.toString(), COMPRESS_NONE);
+            converter.convert(source.toString(), targetPath.toString(), ADJUST_COLOR);
         }
         return targetPath;
     }
