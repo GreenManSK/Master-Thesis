@@ -1,9 +1,10 @@
 package cz.muni.fi.xkurcik.masterthesis.convert.converters;
 
+import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
+import cz.muni.fi.xkurcik.masterthesis.convert.helpers.TiffConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,18 +17,17 @@ import java.nio.file.Paths;
 public class NoneConverter implements IConverter<Void> {
     private static final Logger LOGGER = LogManager.getLogger(NoneConverter.class.getName());
 
-    public NoneConverter() {
+    private ConverterProvider converterProvider;
+
+    public NoneConverter(ConverterProvider converterProvider) {
+        this.converterProvider = converterProvider;
     }
 
     @Override
     public void convert(String source, String target, Void params) throws ConversionException {
-        try {
-            Path targetPath = Paths.get(target);
-            if (!Files.exists(targetPath)) {
-                Files.copy(Paths.get(source), targetPath);
-            }
-        } catch (IOException e) {
-            LOGGER.error(String.format("Error while copying '%s' to '%s'", source, target), e);
+        Path targetPath = Paths.get(target);
+        if (!Files.exists(targetPath)) {
+            TiffConverter.toTiff(Paths.get(source), targetPath, converterProvider);
         }
     }
 

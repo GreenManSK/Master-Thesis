@@ -14,7 +14,7 @@ import java.util.List;
  * @author Lukáš Kurčík <lukas.kurcik@gmail.com>
  */
 public enum Codec {
-    NONE(Format.TIFF, Format.TIFF, NoneConverter.class),
+    NONE(Format.PPM, Format.TIFF, NoneConverter.class),
     FLIF(Format.PPM, Format.FLIF, FlifConverter.class),
     JPEG(Format.PPM, Format.JPEG, JpegConverter.class),
     JPEG_XR(Format.PPM, Format.JPEG_XR, JpegXrConverter.class),

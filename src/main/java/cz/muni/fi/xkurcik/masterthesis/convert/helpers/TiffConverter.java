@@ -40,6 +40,13 @@ public class TiffConverter {
      */
     public static Path toTiff(Path source, ConverterProvider converterProvider) throws ConversionException {
         Path targetPath = PathsHelper.changeFileExtension(source, Format.TIFF.getExtension());
+        return toTiff(source, targetPath, converterProvider);
+    }
+
+    /**
+     * Converts image to tif file and returns path to the new file
+     */
+    public static Path toTiff(Path source, Path targetPath, ConverterProvider converterProvider) throws ConversionException {
         LOGGER.debug(String.format("Converting '%s' to %s", source.toString(), Format.TIFF));
         if (!Files.exists(targetPath)) {
             if (Format.PGF.isFormat(source)) {

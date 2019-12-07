@@ -31,7 +31,7 @@ public class ConverterProvider {
     }
 
     private void fromConfig(Runtime runtime, Config config) {
-        noneConverter = new NoneConverter();
+        noneConverter = new NoneConverter(this);
         if (config.codecs.containsKey(FlifConverter.NAME)) {
             flifConverter = new FlifConverter(runtime, config.codecs.get(FlifConverter.NAME));
         }
