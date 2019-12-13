@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -122,6 +123,9 @@ public class MassEvaluator {
             String convertedDatasetName = NamingHelper.createDatasetName(datasetName, codec.getKey(), codec.getValue(), converter);
 
             Path convertedDatasetPath = convertedDatasets.resolve(convertedDatasetName);
+            if (!Files.exists(convertedDatasetPath)) {
+                LOGGER.info(String.format("Skipping %s converted by %s - dose not exist", datasetName, codec.toString()));
+            }
             Path symlinkResultPath = convertedDatasetPath.resolve(NamingHelper.getResultFolderName(sequence));
             Path trackerResultPath = convertedDatasetPath.resolve(NamingHelper.getResultFolderName(sequence, tracker));
 
