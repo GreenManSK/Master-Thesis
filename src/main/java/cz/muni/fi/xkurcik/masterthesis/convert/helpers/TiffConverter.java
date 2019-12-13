@@ -21,6 +21,7 @@ public class TiffConverter {
 
     private static final String COMPRESS_NONE = "";
     private static final String ADJUST_COLOR = "-auto-level";
+    private static final String ADJUST_DEPTH = "-depth 16";
 
     /**
      * Converts .tif file to specified format and returns path to the new file with correct file extension
@@ -50,8 +51,10 @@ public class TiffConverter {
         LOGGER.debug(String.format("Converting '%s' to %s", source.toString(), Format.TIFF));
         if (!Files.exists(targetPath)) {
             if (Format.PGF.isFormat(source)) {
-                PgfConverter converter = converterProvider.getPgfConverter();
-                converter.convert(source.toString(), targetPath.toString(), new PgfConverter.Config(true, 0));
+                PgfConverter pgfConverter = converterProvider.getPgfConverter();
+                pgfConverter.convert(source.toString(), targetPath.toString(), new PgfConverter.Config(true, 0));
+                ImageMagickConverter imageMagickConverter = converterProvider.getImageMagickConverter();
+                imageMagickConverter.convert(targetPath.toString(), targetPath.toString(), ADJUST_DEPTH);
             } else {
                 ImageMagickConverter converter = converterProvider.getImageMagickConverter();
                 converter.convert(source.toString(), targetPath.toString(), COMPRESS_NONE);
