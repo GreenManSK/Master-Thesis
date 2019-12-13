@@ -6,4 +6,6 @@ target/*
 out*/
 *.log
 run.bat
-config.json
+*.json
+.bat
+!config.example.json
