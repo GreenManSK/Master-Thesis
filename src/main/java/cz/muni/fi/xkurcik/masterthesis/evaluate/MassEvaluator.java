@@ -125,6 +125,7 @@ public class MassEvaluator {
             Path convertedDatasetPath = convertedDatasets.resolve(convertedDatasetName);
             if (!Files.exists(convertedDatasetPath)) {
                 LOGGER.info(String.format("Skipping %s converted by %s - dose not exist", datasetName, codec.toString()));
+                return result;
             }
             Path symlinkResultPath = convertedDatasetPath.resolve(NamingHelper.getResultFolderName(sequence));
             Path trackerResultPath = convertedDatasetPath.resolve(NamingHelper.getResultFolderName(sequence, tracker));

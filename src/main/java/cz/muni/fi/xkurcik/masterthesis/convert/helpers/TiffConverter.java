@@ -3,6 +3,7 @@ package cz.muni.fi.xkurcik.masterthesis.convert.helpers;
 import cz.muni.fi.xkurcik.masterthesis.convert.ConverterProvider;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ConversionException;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.ImageMagickConverter;
+import cz.muni.fi.xkurcik.masterthesis.convert.converters.IrfanViewConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.converters.PgfConverter;
 import cz.muni.fi.xkurcik.masterthesis.convert.types.Format;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +29,16 @@ public class TiffConverter {
      */
     public static Path toFormat(Path source, Format target, ConverterProvider converterProvider) throws ConversionException {
         LOGGER.debug(String.format("Converting '%s' to %s", source.toString(), target.getExtension()));
-        ImageMagickConverter converter = converterProvider.getImageMagickConverter();
         Path targetPath = PathsHelper.changeFileExtension(source, target.getExtension());
+
         if (!Files.exists(targetPath)) {
-            converter.convert(source.toString(), targetPath.toString(), ADJUST_COLOR);
+            if (target == Format.PPM) {
+                IrfanViewConverter converter = converterProvider.getIrfanViewConverter();
+                converter.convert(source.toString(), targetPath.toString(), "");
+            } else {
+                ImageMagickConverter converter = converterProvider.getImageMagickConverter();
+                converter.convert(source.toString(), targetPath.toString(), ADJUST_COLOR);
+            }
         }
         return targetPath;
     }
@@ -53,8 +60,6 @@ public class TiffConverter {
             if (Format.PGF.isFormat(source)) {
                 PgfConverter pgfConverter = converterProvider.getPgfConverter();
                 pgfConverter.convert(source.toString(), targetPath.toString(), new PgfConverter.Config(true, 0));
-                ImageMagickConverter imageMagickConverter = converterProvider.getImageMagickConverter();
-                imageMagickConverter.convert(targetPath.toString(), targetPath.toString(), ADJUST_DEPTH);
             } else {
                 ImageMagickConverter converter = converterProvider.getImageMagickConverter();
                 converter.convert(source.toString(), targetPath.toString(), COMPRESS_NONE);

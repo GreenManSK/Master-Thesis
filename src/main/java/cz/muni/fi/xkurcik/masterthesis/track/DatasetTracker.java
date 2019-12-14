@@ -62,6 +62,7 @@ public class DatasetTracker implements IDatasetTracker {
         Path convertedDatasetPath = datasetsDir.resolve(convertedDatasetName);
         if (!Files.exists(convertedDatasetPath)) {
             LOGGER.info(String.format("Skipping %s converted by %s - dose not exist", datasetName, codec.toString()));
+            return;
         }
         Path symlinkPath = trackersDir.resolve(datasetName);
         try {

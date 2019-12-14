@@ -17,6 +17,7 @@ public class ConverterProvider {
 
     private FlifConverter flifConverter;
     private ImageMagickConverter imageMagickConverter;
+    private IrfanViewConverter irfanViewConverter;
     private JpegConverter jpegConverter;
     private JpegXrConverter jpegXrConverter;
     private OpenJpegConverter openJpegConverter;
@@ -43,6 +44,9 @@ public class ConverterProvider {
         }
         if (config.codecs.containsKey(ImageMagickConverter.NAME)) {
             imageMagickConverter = new ImageMagickConverter(runtime, config.codecs.get(ImageMagickConverter.NAME));
+        }
+        if (config.codecs.containsKey(IrfanViewConverter.NAME)) {
+            irfanViewConverter = new IrfanViewConverter(runtime, config.codecs.get(IrfanViewConverter.NAME));
         }
         if (config.codecs.containsKey(OpenJpegConverter.NAME)) {
             openJpegConverter = new OpenJpegConverter(runtime, config.codecs.get(OpenJpegConverter.NAME));
@@ -98,6 +102,14 @@ public class ConverterProvider {
 
     public void setImageMagickConverter(ImageMagickConverter imageMagickConverter) {
         this.imageMagickConverter = imageMagickConverter;
+    }
+
+    public IrfanViewConverter getIrfanViewConverter() {
+        return irfanViewConverter;
+    }
+
+    public void setIrfanViewConverter(IrfanViewConverter irfanViewConverter) {
+        this.irfanViewConverter = irfanViewConverter;
     }
 
     public NoneConverter getNoneConverter() {
