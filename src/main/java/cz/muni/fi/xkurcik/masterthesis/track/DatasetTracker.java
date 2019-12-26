@@ -85,12 +85,17 @@ public class DatasetTracker implements IDatasetTracker {
      */
     private void trackTracker(String datasetName, int filenameLength, Path symlinkPath, List<String> sequencesList, ITracker tracker) throws IOException {
         for (String sequence : sequencesList) {
-            tracker.run(datasetName, sequence, filenameLength);
             Path resultDir = symlinkPath.resolve(NamingHelper.getResultFolderName(sequence));
+            Path trackerResultDir = symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker));
+            if (Files.exists(trackerResultDir)) {
+                LOGGER.info(String.format("Skipping sequence %s for %s by tracker %s because it already exists", sequence, datasetName, tracker.getName()));
+                continue;
+            }
+            tracker.run(datasetName, sequence, filenameLength);
             if (Files.exists(resultDir)) {
                 Files.move(
                         resultDir,
-                        symlinkPath.resolve(NamingHelper.getResultFolderName(sequence, tracker))
+                        trackerResultDir
                 );
             } else {
                 LOGGER.error(String.format("Result folder was not created for %s by tracker %s sequence %s", datasetName, tracker.getName(), sequence));
