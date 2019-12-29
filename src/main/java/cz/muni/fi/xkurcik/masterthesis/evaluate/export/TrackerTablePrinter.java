@@ -67,7 +67,9 @@ public class TrackerTablePrinter {
 
         for (EvaluationResult result : results) {
             for (Evaluator evaluator : Evaluator.values()) {
-                printer.print(result.get(evaluator).trim());
+                if (result.get(evaluator) != null) {
+                    printer.print(result.get(evaluator).trim());
+                }
             }
         }
 
